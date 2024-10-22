@@ -8,9 +8,20 @@ using System.Threading.Tasks;
 
 namespace Sem3_Laba1
 {
-    class Switch : NetworkDevice
+    public class Switch : NetworkDevice
     {
-        public int NumPorts { get; set; }  // Количество портов
+        private int numPorts; // Количество портов
+        public int NumPorts {
+            get
+            {
+                return numPorts;
+            }
+            set
+            {
+                if (value < 0) throw new ArgumentException("Wrong argument!");
+                numPorts = value;
+            }
+        }
         public bool Managed { get; set; }  // Управляемый или нет
 
 
