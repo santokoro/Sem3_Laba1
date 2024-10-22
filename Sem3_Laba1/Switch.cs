@@ -8,25 +8,23 @@ using System.Threading.Tasks;
 
 namespace Sem3_Laba1
 {
-
-
-
     class Switch : NetworkDevice
     {
-        public int numPorts { get; set; }  // Количество портов
-        public bool managed { get; set; }  // Управляемый или нет
+        public int NumPorts { get; set; }  // Количество портов
+        public bool Managed { get; set; }  // Управляемый или нет
 
 
-        public Switch(string brand = "", double price = 0.0, string model = "", string color = "", int numPorts = 0, bool managed = false)
-            : base(brand, price, model, color)
+        public Switch(string brand = "", string model = "", string color = "", double price = 0.0, int numPorts = 0, bool managed = false)
+            : base(brand, model, color, price)
         {
-            this.numPorts = numPorts;
-            this.managed = managed;
+            NumPorts = numPorts;
+            Managed = managed;
         }
-        public override void Print()  // Переопределенная функция для печати сведений о коммутаторе
+        public override string getInfo()
         {
-            base.Print();
-            Console.WriteLine($"Number of Ports: {numPorts}, Managed: {managed}");
+            return base.getInfo() + $"Number of Ports: {NumPorts}\n" +
+                $"Managed: {Managed}\n"; 
         }
+        
     }
 }

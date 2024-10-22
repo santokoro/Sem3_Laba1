@@ -7,25 +7,23 @@ using System.Threading.Tasks;
 
 namespace Sem3_Laba1
 {
-
-
-
     class WiFiRouter : NetworkDevice
-
     {
-        private int maxSpeed;
-        private int range;
+        public int MaxSpeed { get; set; }
+        public int Range { get; set; }
 
-        public WiFiRouter(string brand = "", double price = 0.0, string model = "", string color = "", int maxSpeed = 0, int range = 0)
-        : base(brand, price, model, color)
+        public WiFiRouter(string brand = "", string model = "", 
+            string color = "", double price = 0.0, int maxSpeed = 0, int range = 0)
+        : base(brand, model, color, price)
         {
-            this.maxSpeed = maxSpeed;
-            this.range = range;
+            MaxSpeed = maxSpeed;
+            Range = range;
         }
-        public override void Print()  // Переопределенная функция для печати сведений о маршрутизаторе
+        public override string getInfo()
         {
-            base.Print();
-            Console.WriteLine($"Max Speed: {maxSpeed}, Range: {range}");
+            return base.getInfo() + 
+                $"Max Speed: {MaxSpeed}\n" +
+                $"Range: {Range}\n";
         }
     }
 }

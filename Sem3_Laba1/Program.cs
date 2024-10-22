@@ -1,85 +1,144 @@
-﻿using System;
+﻿using Laba_1_Sem3;
+using System;
 using System.Collections.Generic;
 
 namespace Sem3_Laba1
 {
-    public class ComputerDevice
+    class Program
     {
-        public string Brand { get; set; }
-        public string Model { get; set; }
-
-        public string Color { get; set; }
-
-
-
-        private double price;
-        public double Price
+        static void Main(string[] args)
         {
-            get
+            Menu();
+        }
+
+        private static NetworkDevice CreateNetworkDevice()
+        {
+            string brand, model, color;
+            
+            double price;
+            try
             {
-                return price;
+                Console.WriteLine("Enter brand: ");
+                brand = Console.ReadLine();
+                Console.WriteLine("Enter model: ");
+                model = Console.ReadLine();
+                Console.WriteLine("Enter color: ");
+                color = Convert.ToString(Console.ReadLine());
+                Console.WriteLine("Enter price: ");
+                price = Convert.ToInt32(Console.ReadLine());
+
+                return new NetworkDevice(brand, model, color, price);
             }
-            set
+            catch
             {
-                if (value < 0) throw new ArgumentException("Wrong argument!");
-                price = value;
+                throw new ArgumentException("Wrong argument!");
+            }
+        }
+        public static Switch CreateSwitch()
+        {
+            int numPorts, flag;
+            bool managed;
+            NetworkDevice device = CreateNetworkDevice();
+            try
+            {
+                Console.WriteLine("Enter number of ports: ");
+                numPorts = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter is managed(1-true, 0-false): ");
+                flag = Convert.ToInt32(Console.ReadLine());
+                if(flag == 0)
+                {
+                    managed = false;
+                }
+                else if(flag == 1)
+                {
+                    managed = true;
+                }
+                else
+                {
+                    throw new ArgumentException("Wrong Argument");
+                }
+
+                return new Switch(device.Brand, device.Model, device.Color, device.Price, numPorts, managed);
+            }
+            catch
+            {
+                throw new ArgumentException("Wrong argument!");
             }
         }
 
-        public ComputerDevice(string brand = "Unknown", string model = "Unknown", string color = "Unknown", double price = 0.0)
+        public static WiFiRouter CreateWiFiRouter()
         {
-            Brand = brand;
-            Model = model;
-            Color = color;
-            Price = price;
+            int maxSpeed, range;
+            NetworkDevice device = CreateNetworkDevice();
+            try
+            {
+                Console.WriteLine("Enter max speed: ");
+                maxSpeed = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter range: ");
+                range = Convert.ToInt32(Console.ReadLine());
+
+                return new WiFiRouter(device.Brand, device.Model, device.Color, device.Price, maxSpeed, range);
+            }
+            catch
+            {
+                throw new ArgumentException("Wrong argument!");
+            }
+
+        }
+        static void PrintDevices(List<NetworkDevice> devices)
+        {
+            foreach (var device in devices)
+            {
+                Console.WriteLine(device.getInfo());
+            }
         }
 
-        public virtual string Info()
+        static void Menu()
         {
-            return $"Brand: {Brand}\n" +
-                $"Model: {Model}\n" +
-                $"Color: {Color}\n" +
-                $"Price: {Price}$\n";
+            List<NetworkDevice> devices = new List<NetworkDevice>();
+            int choice = -1;
+
+            do
+            {
+                Console.WriteLine("Menu:\n" +
+                    "1. Add Switch\n" +
+                    "2. Add WiFi Router\n" +
+                    "3. Print all devices\n" +
+                    "0. Exit\n" +
+                    "Enter choice: ");
+                try
+                {
+                    choice = Convert.ToInt32(Console.ReadLine());
+                    Console.Clear();
+                    switch (choice)
+                    {
+                        case 1:
+                            devices.Add(CreateSwitch());
+                            Console.Clear();
+                            break;
+                        case 2:
+                            devices.Add(CreateWiFiRouter());
+                            Console.Clear();
+                            break;
+                        case 3:
+                            PrintDevices(devices);
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.\n");
+                            break;
+                    }
+                }
+                catch (ArgumentException)
+                {
+                    Console.WriteLine("Invalid data. Try again.\n");
+                    continue;
+                }
+
+            } while (choice != 0);
         }
-    }
 
-    public class Laptop : ComputerDevice
-    {
-        public double Weight { get; set; }
-        public int BatteryLife { get; set; }  // Время автономной работы в часах
-
-        public Laptop(string brand = "Unknown", string model = "Unknown", string color = "Unknown", double price = 0.0, double weight = 0.0, int batteryLife = 0)
-            : base(brand, model, color, price)
-        {
-            Weight = weight;
-            BatteryLife = batteryLife;
-        }
-
-        public override string Info()
-        {
-            return base.Info() +
-                $"Weight: {Weight} kg\n" +
-                $"Battery Life: {BatteryLife} hours\n";
-        }
-    }
-
-    public class Server : ComputerDevice
-    {
-        public int NumProcessors { get; set; }  // Количество процессоров
-        public int StorageCapacity { get; set; }  // Объем памяти в Гб
-
-        public Server(string brand = "Unknown", string model = "Unknown", string color = "Unknown", double price = 0.0, int numProcessors = 0, int storageCapacity = 0)
-            : base(brand, model, color, price)
-        {
-            NumProcessors = numProcessors;
-            StorageCapacity = storageCapacity;
-        }
-
-        public override string Info()
-        {
-            return base.Info() +
-                $"Number of Processors: {NumProcessors}\n" +
-                $"Storage Capacity: {StorageCapacity} GB\n";
-        }
-    }
+        
+    }   
 }
